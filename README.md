@@ -6,7 +6,7 @@ Generates a set of radial bar charts as svg and png files with 3 radial bars:
 
 
 This project uses Pablo Molnar's [Radial Progress Chart](https://github.com/pablomolnar/radial-progress-chart)
-in an adapted version.
+in a slightly adapted version.
 
 ## Install
 1. Install Node.js
