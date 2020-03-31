@@ -1,6 +1,8 @@
 # Generate Radial Bar Charts
 
-Generates a set of radial bar charts as svg and png files with 3 radial bars.
+Generates a set of radial bar charts as svg and png files with 3 radial bars:
+
+<img src="https://geofy.de/blog/images/radial-example.png">
 
 ## Install
 1. Install Node.js
