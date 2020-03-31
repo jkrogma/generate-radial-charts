@@ -1,3 +1,8 @@
+/**
+ * This is a slightly adapted version of Pablo Molnar's Radial Progress Chart:
+ * https://github.com/pablomolnar/radial-progress-chart
+ */
+
 // RadialProgressChart object
 function RadialProgressChart(query, options) {
 
