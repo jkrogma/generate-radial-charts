@@ -25,7 +25,10 @@ function sleep(ms) {
     msleep(ms);
 }
 
+// define default theme
 let theme = 'generic';
+
+// a set of color themes
 let radialColorsByTheme = {
     'generic': ['#051F20', '#235347', '#8EB69B'],
     'green': ['#051F20', '#235347', '#8EB69B'],
@@ -39,14 +42,17 @@ let radialColorsByTheme = {
     'bonbon': ['#111d5e', '#b21f66', '#fe346e'],
 };
 
+// read 'theme' cli argument
 if(argv.theme) {
     theme = argv.theme;
     radialColors = radialColorsByTheme[theme];
 }
+// read 'colors'' cli argument
 if(argv.colors) {
     radialColors = argv.colors.split(',');
 }
 
+// initialize the chart object
 let radialIndicator = new chart('#radialContainer', {
     diameter: 130,
     min: 0,
@@ -81,7 +87,7 @@ for(let radialBarOneValue = 0; radialBarOneValue <= 10; ++radialBarOneValue) {
             // store SVG code to file system
             fs.writeFileSync(fileName + '.svg', svgBuffer);
 
-            // converting into PNG file and store into filesystem
+            // convert SVG into PNG file and store into filesystem
             console.log('converting into ' + fileName + '.png');
             sharp(fileName + '.svg')
                 .png()
