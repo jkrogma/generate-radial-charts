@@ -1,2 +1,1 @@
-# jkrogma
-generate-radial-charts
+# Generate Radial Bar Charts
