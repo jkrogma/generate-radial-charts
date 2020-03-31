@@ -25,8 +25,9 @@ function sleep(ms) {
     msleep(ms);
 }
 
-let theme = 'green';
+let theme = 'generic';
 let radialColorsByTheme = {
+    'generic': ['#051F20', '#235347', '#8EB69B'],
     'green': ['#051F20', '#235347', '#8EB69B'],
     'red': ['#7C0A02', '#B22222', '#E25822'],
     'pink': ['#721b65', '#b80d57', '#f8615a'],
@@ -61,20 +62,31 @@ let radialIndicator = new chart('#radialContainer', {
 });
 
 
-let svgBuffer = '';
-for(let firstRing = 0; firstRing <= 10; ++firstRing) {
-    for(let secondRing = 0; secondRing <= 10; ++secondRing) {
-        for(let thirdRing = 0; thirdRing <= 10; ++thirdRing) {
-            fs.mkdirSync('./radial/' + theme + '/' + firstRing + '/' + secondRing, { recursive: true });
-            console.log('generating radial/' + theme + '/' + firstRing + '/' + secondRing + '/' + thirdRing + '.svg');
-            radialIndicator.update([firstRing, secondRing, thirdRing]);
-            svgBuffer = body.select('#radialContainer').html();
-            fs.writeFileSync('./radial/' + theme + '/' + firstRing + '/' + secondRing + '/' + thirdRing + '.svg', svgBuffer);
-            console.log('converting into radial/' + theme + '/' + firstRing + '/' + secondRing + '/' + thirdRing + '.png');
-            sharp('./radial/' + theme + '/' + firstRing + '/' + secondRing + '/' + thirdRing + '.svg')
+// iterate through the radial bar values
+for(let radialBarOneValue = 0; radialBarOneValue <= 10; ++radialBarOneValue) {
+    for(let radialBarTwoValue = 0; radialBarTwoValue <= 10; ++radialBarTwoValue) {
+        for(let radialBarThreeValue = 0; radialBarThreeValue <= 10; ++radialBarThreeValue) {
+            // create folder
+            fs.mkdirSync('./radial/' + theme + '/' + radialBarOneValue + '/' + radialBarTwoValue, { recursive: true });
+
+            // update chart
+            radialIndicator.update([radialBarOneValue, radialBarTwoValue, radialBarThreeValue]);
+
+            let fileName = './radial/' + theme + '/' + radialBarOneValue + '/' + radialBarTwoValue + '/' + radialBarThreeValue;
+            console.log('generating ' + fileName + '.svg');
+
+            // read SVG code from HTML div
+            let svgBuffer = body.select('#radialContainer').html();
+
+            // store SVG code to file system
+            fs.writeFileSync(fileName + '.svg', svgBuffer);
+
+            // converting into PNG file and store into filesystem
+            console.log('converting into ' + fileName + '.png');
+            sharp(fileName + '.svg')
                 .png()
                 .resize(35, 35)
-                .toFile('./radial/' + theme + '/' + firstRing + '/' + secondRing + '/' + thirdRing + '.png')
+                .toFile(fileName + '.png')
                 .catch(function(err) {
                     console.log(err)
                 });
