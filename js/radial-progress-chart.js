@@ -22,6 +22,9 @@ function RadialProgressChart(query, options) {
         , inner = []
         , outer = [];
 
+    this.width = width;
+    this.height = height;
+
     function innerRadius(item) {
         var radius = inner[item.index];
         if (radius) return radius;
@@ -68,7 +71,9 @@ function RadialProgressChart(query, options) {
         .attr("width", "100%")
         .attr("viewBox", dim)
         .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        .attr("class", "outer")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+    ;
 
     // add gradients defs
     var defs = self.svg.append("svg:defs");

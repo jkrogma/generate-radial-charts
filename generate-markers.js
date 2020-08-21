@@ -27,6 +27,8 @@ function sleep(ms) {
 
 // define default theme
 let theme = 'generic';
+let backgroundColor = null;
+let filePathInfix = '';
 
 // a set of color themes
 let radialColorsByTheme = {
@@ -51,6 +53,14 @@ if(argv.theme) {
 if(argv.colors) {
     radialColors = argv.colors.split(',');
 }
+// read 'background'' cli argument
+if(argv.background) {
+    backgroundColor = argv.background;
+}
+// read 'infix' cli argument
+if(argv.infix) {
+    filePathInfix = argv.infix;
+}
 
 // initialize the chart object
 let radialIndicator = new chart('#radialContainer', {
@@ -58,28 +68,45 @@ let radialIndicator = new chart('#radialContainer', {
     min: 0,
     max: 10,
     stroke: {
-        gap: 2
+        width: 30,
+        gap: 10
     },
+    shadow: {
+        width: 5
+    },
+    round: false,
     series: [
-        {value: 0, color: {solid: radialColors[0], background: 'white'}},
-        {value: 0, color: {solid: radialColors[1], background: 'white'}},
-        {value: 0, color: {solid: radialColors[2], background: 'white'}},
+        {value: 0, color: {solid: radialColors[0], background: '#777'}},
+        {value: 0, color: {solid: radialColors[1], background: '#666'}},
+        {value: 0, color: {solid: radialColors[2], background: '#555'}},
     ]
 });
 
+if(backgroundColor) {
+    radialIndicator.svg.append("g").lower()
+        .append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", (radialIndicator.width / 2) - 5)
+        .style("fill", backgroundColor)
+        .style("fill-opacity", 0.75)
+        .style("stroke", radialColors[0])
+        .style("stroke-width", "5");
+}
 
 // iterate through the radial bar values
 for(let radialBarOneValue = 0; radialBarOneValue <= 10; ++radialBarOneValue) {
     for(let radialBarTwoValue = 0; radialBarTwoValue <= 10; ++radialBarTwoValue) {
+        process.stdout.write(radialBarOneValue.toString() + "    " + radialBarTwoValue.toString() + "    ");
         for(let radialBarThreeValue = 0; radialBarThreeValue <= 10; ++radialBarThreeValue) {
+            process.stdout.write(".");
             // create folder
-            fs.mkdirSync('./radial/' + theme + '/' + radialBarOneValue + '/' + radialBarTwoValue, { recursive: true });
+            fs.mkdirSync('./radial/' + theme + '/' + filePathInfix + radialBarOneValue + '/' + radialBarTwoValue, { recursive: true });
 
             // update chart
             radialIndicator.update([radialBarOneValue, radialBarTwoValue, radialBarThreeValue]);
 
-            let fileName = './radial/' + theme + '/' + radialBarOneValue + '/' + radialBarTwoValue + '/' + radialBarThreeValue;
-            console.log('generating ' + fileName + '.svg');
+            let fileName = './radial/' + theme + '/' + filePathInfix + radialBarOneValue + '/' + radialBarTwoValue + '/' + radialBarThreeValue;
 
             // read SVG code from HTML div
             let svgBuffer = body.select('#radialContainer').html();
@@ -88,15 +115,16 @@ for(let radialBarOneValue = 0; radialBarOneValue <= 10; ++radialBarOneValue) {
             fs.writeFileSync(fileName + '.svg', svgBuffer);
 
             // convert SVG into PNG file and store into filesystem
-            console.log('converting into ' + fileName + '.png');
             sharp(fileName + '.svg')
                 .png()
-                .resize(35, 35)
+                .resize(31, 31)
                 .toFile(fileName + '.png')
                 .catch(function(err) {
                     console.log(err)
                 });
             sleep(50);
         }
+        process.stdout.write("\r");
     }
 }
+console.log("\nDone");
