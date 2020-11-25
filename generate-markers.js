@@ -27,6 +27,7 @@ function sleep(ms) {
 
 // define default theme
 let theme = 'generic';
+let size = 31;
 let backgroundColor = null;
 let filePathInfix = '';
 
@@ -48,6 +49,10 @@ let radialColorsByTheme = {
 if(argv.theme) {
     theme = argv.theme;
     radialColors = radialColorsByTheme[theme];
+}
+// read 'size' cli argument
+if(argv.size) {
+    size = argv.size;
 }
 // read 'colors'' cli argument
 if(argv.colors) {
@@ -117,7 +122,7 @@ for(let radialBarOneValue = 0; radialBarOneValue <= 10; ++radialBarOneValue) {
             // convert SVG into PNG file and store into filesystem
             sharp(fileName + '.svg')
                 .png()
-                .resize(31, 31)
+                .resize(size, size)
                 .toFile(fileName + '.png')
                 .catch(function(err) {
                     console.log(err)
