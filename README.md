@@ -2,7 +2,7 @@
 
 Generates a set of radial bar charts as svg and png files with 3 radial bars:
 
-<img src="https://geofy.de/blog/images/radial-example.png">
+<img src="https://api.geofy.de/images/radial/marine/7/3/8.svg">
 
 
 This project uses Pablo Molnar's [Radial Progress Chart](https://github.com/pablomolnar/radial-progress-chart)
